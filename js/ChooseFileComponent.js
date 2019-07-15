@@ -24,21 +24,22 @@ Vue.component('choose-file',{
             const $sourceTableNodes = document.querySelectorAll('tbody');
             const $DataTableNode = $sourceTableNodes[$sourceTableNodes.length - 1];
             console.log($DataTableNode);
-            for (let i=0; i < $DataTableNode.childNodes.length; i++) {
-                console.log($DataTableNode.childNodes[i]);
-                let row = $DataTableNode.childNodes[i];
-                console.log($DataTableNode.childNodes[i].childNodes[4]);
-                // console.log(row.childNodes[i]);
+            // console.log($DataTableNode.childNodes);
+            const arrRows = [...$DataTableNode.getElementsByTagName("tr")];
+            // const arrRows = [...arrRows];
+            // console.log(arrRows[4].getElementsByTagName("td"));
 
-                let item = {'name': row.childNodes[0].textContent,
-                            'ost_n_d': row.childNodes[1].textContent,
-                            'ost_n_k': row.childNodes[2].textContent,
-                            'ob_d': row.childNodes[3].textContent,
-                            'ob_k': row.childNodes[4].textContent,
-                            'ost_k_d': row.childNodes[5].textContent,
-                            'ost_k_k': row.childNodes[6].textContent,
+            for (let i=4; i < arrRows.length; i++) {
+                const arrColumns = [...arrRows[i].getElementsByTagName("td")];
+                let item = {'name': arrColumns[0].textContent,
+                            'ost_n_d': arrColumns[1].textContent,
+                            'ost_n_k': arrColumns[2].textContent,
+                            'ob_d': arrColumns[3].textContent,
+                            'ob_k': arrColumns[4].textContent,
+                            'ost_k_d': arrColumns[5].textContent,
+                            'ost_k_k': arrColumns[6].textContent,
                             };
-                console.log(item);
+                // console.log(item);
                 this.sourceReportData.push(item);
             }
             console.log(this.sourceReportData);
