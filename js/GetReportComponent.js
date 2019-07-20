@@ -81,8 +81,28 @@ Vue.component('getReport', {
                         <span>Выбрано: {{currentDataDimension}}</span>
                     </div>
                     <TABLE v-show="isShowReport"  CELLSPACING=0>
-                        <div v-for="item of sourceReportData">
                             <TR CLASS=table_row-data>
+                                <TD CLASS="table__column table__column-name">Контрагент</TD>
+                                <TD CLASS="table__column table__column-data">
+                                    <label>С.н.Д<input type="checkbox"></label>
+                                </TD>
+                                <TD CLASS="table__column table__column-data">
+                                    <label>С.н.К<input type="checkbox"></label>
+                                </TD>
+                                <TD CLASS="table__column table__column-data">
+                                    <label>Об.Д<input type="checkbox"></label>
+                                </TD>
+                                <TD CLASS="table__column table__column-data">
+                                    <label>Об.К<input type="checkbox"></label>
+                                </TD>
+                                <TD CLASS="table__column table__column-data">
+                                    <label>С.к.Д<input type="checkbox"></label>
+                                </TD>
+                                <TD CLASS="table__column table__column-data">
+                                    <label>С.к.К<input type="checkbox"></label>
+                                </TD>
+                            </TR>
+                            <TR CLASS=table_row-data v-for="(item, index) of sourceReportData" :key="index">
                                 <TD CLASS="table__column table__column-name">{{item.name}}</TD>
                                 <TD CLASS="table__column table__column-data">{{item.ost_n_d | setDivider(dataDimensions[currentDataDimension].divider) | setAccuracy(dataDimensions[currentDataDimension].accuracy)}}</TD>
                                 <TD CLASS="table__column table__column-data">{{item.ost_n_k | setDivider(dataDimensions[currentDataDimension].divider) | setAccuracy(dataDimensions[currentDataDimension].accuracy)}}</TD>
@@ -91,7 +111,6 @@ Vue.component('getReport', {
                                 <TD CLASS="table__column table__column-data">{{item.ost_k_d | setDivider(dataDimensions[currentDataDimension].divider) | setAccuracy(dataDimensions[currentDataDimension].accuracy)}}</TD>
                                 <TD CLASS="table__column table__column-data">{{item.ost_k_k | setDivider(dataDimensions[currentDataDimension].divider) | setAccuracy(dataDimensions[currentDataDimension].accuracy)}}</TD>
                             </TR>
-                        </div>
                     </TABLE>
                 </div>`
 })
