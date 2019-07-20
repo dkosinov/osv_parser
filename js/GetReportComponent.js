@@ -10,13 +10,16 @@ Vue.component('getReport', {
                 {divider: 1000, caption1: 'тыс.руб.', caption2: 'в тыс.руб.', accuracy: 0},
                 {divider: 1000000, caption1: 'млн.руб.', caption2: 'в млн.руб.', accuracy: 1},
             ],
-            // selected: 'А',
-            // options: [
-            //     { text: 'Один', value: 'А' },
-            //     { text: 'Два', value: 'Б' },
-            //     { text: 'Три', value: 'В' }
-            // ],
         }
+    },
+    filters: {
+        setDivider: function (num, divider){
+            return num/divider;
+        },
+        setAccuracy: function  (num, accuracy) {
+            return num.toFixed(accuracy);
+        },
+
     },
     methods: {
         del_spaces(str){
@@ -24,9 +27,7 @@ Vue.component('getReport', {
             let num = +str;
             return num;
         },
-        setAccuracy (float) {
-            return float.toFixed(this.dataDimensions[this.currentDataDimension].accuracy);
-        },
+
         getDataFromSourceReportOutTag (){
             this.sourceReportData = [];
             const $sourceTableNodes = document.querySelectorAll('tbody');
@@ -70,18 +71,6 @@ Vue.component('getReport', {
                     <button @click="isShowReport = !isShowReport">{{showHideCaption}}</button>
                     <button @click="getDataFromSourceReportOutTag()">Получить данные</button>
                     <div>
-<!--                        <select v-model="selected">-->
-<!--                          <option v-for="option in options" v-bind:value="option.value">-->
-<!--                            {{ option.text }}-->
-<!--                          </option>-->
-<!--                        </select>-->
-<!--                        <span>Выбрано: {{ selected }}</span>-->
-<!--                        <select v-model="selected">-->
-<!--&lt;!&ndash;                            <option disabled value="">Выберите один из вариантов</option>&ndash;&gt;-->
-<!--                            <option v-for="option in dataDimensions" v-bind:value="option.divider">-->
-<!--                                {{option.caption2}}</option>-->
-<!--                        </select>-->
-<!--                        <span>Выбрано: {{selected}}</span>-->
                         <select v-model="currentDataDimension">
 <!--                            <option disabled value="">Выберите один из вариантов</option>-->
                             <option v-for="(option, index) in dataDimensions"
@@ -95,12 +84,12 @@ Vue.component('getReport', {
                         <div v-for="item of sourceReportData">
                             <TR CLASS=table_row-data>
                                 <TD CLASS="table__column table__column-name">{{item.name}}</TD>
-                                <TD CLASS="table__column table__column-data">{{setAccuracy(item.ost_n_d/dataDimensions[currentDataDimension].divider)}}</TD>
-                                <TD CLASS="table__column table__column-data">{{setAccuracy(item.ost_n_k/dataDimensions[currentDataDimension].divider)}}</TD>
-                                <TD CLASS="table__column table__column-data">{{setAccuracy(item.ob_d/dataDimensions[currentDataDimension].divider)}}</TD>
-                                <TD CLASS="table__column table__column-data">{{setAccuracy(item.ob_k/dataDimensions[currentDataDimension].divider)}}</TD>
-                                <TD CLASS="table__column table__column-data">{{setAccuracy(item.ost_k_d/dataDimensions[currentDataDimension].divider)}}</TD>
-                                <TD CLASS="table__column table__column-data">{{setAccuracy(item.ost_k_k/dataDimensions[currentDataDimension].divider)}}</TD>
+                                <TD CLASS="table__column table__column-data">{{item.ost_n_d | setDivider(dataDimensions[currentDataDimension].divider) | setAccuracy(dataDimensions[currentDataDimension].accuracy)}}</TD>
+                                <TD CLASS="table__column table__column-data">{{item.ost_n_k | setDivider(dataDimensions[currentDataDimension].divider) | setAccuracy(dataDimensions[currentDataDimension].accuracy)}}</TD>
+                                <TD CLASS="table__column table__column-data">{{item.ob_d | setDivider(dataDimensions[currentDataDimension].divider) | setAccuracy(dataDimensions[currentDataDimension].accuracy)}}</TD>
+                                <TD CLASS="table__column table__column-data">{{item.ob_k | setDivider(dataDimensions[currentDataDimension].divider) | setAccuracy(dataDimensions[currentDataDimension].accuracy)}}</TD>
+                                <TD CLASS="table__column table__column-data">{{item.ost_k_d | setDivider(dataDimensions[currentDataDimension].divider) | setAccuracy(dataDimensions[currentDataDimension].accuracy)}}</TD>
+                                <TD CLASS="table__column table__column-data">{{item.ost_k_k | setDivider(dataDimensions[currentDataDimension].divider) | setAccuracy(dataDimensions[currentDataDimension].accuracy)}}</TD>
                             </TR>
                         </div>
                     </TABLE>
