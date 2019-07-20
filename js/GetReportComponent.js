@@ -96,11 +96,11 @@ Vue.component('getReport', {
                             <TR CLASS=table_row-data>
                                 <TD CLASS="table__column table__column-name">{{item.name}}</TD>
                                 <TD CLASS="table__column table__column-data">{{setAccuracy(item.ost_n_d/dataDimensions[currentDataDimension].divider)}}</TD>
-                                <TD CLASS="table__column table__column-data">{{setAccuracy(item.ost_n_d/dataDimensions[currentDataDimension].divider)}}</TD>
-                                <TD CLASS="table__column table__column-data">{{setAccuracy(item.ost_n_d/dataDimensions[currentDataDimension].divider)}}</TD>
-                                <TD CLASS="table__column table__column-data">{{setAccuracy(item.ost_n_d/dataDimensions[currentDataDimension].divider)}}</TD>
-                                <TD CLASS="table__column table__column-data">{{setAccuracy(item.ost_n_d/dataDimensions[currentDataDimension].divider)}}</TD>
-                                <TD CLASS="table__column table__column-data">{{setAccuracy(item.ost_n_d/dataDimensions[currentDataDimension].divider)}}</TD>
+                                <TD CLASS="table__column table__column-data">{{setAccuracy(item.ost_n_k/dataDimensions[currentDataDimension].divider)}}</TD>
+                                <TD CLASS="table__column table__column-data">{{setAccuracy(item.ob_d/dataDimensions[currentDataDimension].divider)}}</TD>
+                                <TD CLASS="table__column table__column-data">{{setAccuracy(item.ob_k/dataDimensions[currentDataDimension].divider)}}</TD>
+                                <TD CLASS="table__column table__column-data">{{setAccuracy(item.ost_k_d/dataDimensions[currentDataDimension].divider)}}</TD>
+                                <TD CLASS="table__column table__column-data">{{setAccuracy(item.ost_k_k/dataDimensions[currentDataDimension].divider)}}</TD>
                             </TR>
                         </div>
                     </TABLE>
