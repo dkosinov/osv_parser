@@ -1,8 +1,9 @@
-Vue.component('getReport', {
+Vue.component('reportConstructor', {
     data () {
         return {
-            sourceReportHeader: '',
-            sourceReportData: [],
+            reports: [],
+            // isFileDataParsed: false, //если true отображаем таблицу
+            currentReport: 0,
             isShowReport: true,
             isSetViewFilter: false,
             currentDataDimension: 0,
@@ -26,6 +27,11 @@ Vue.component('getReport', {
             if (bool) {
                 return 'Да';
             } else return  'Нет';
+        },
+        isPrint: function (bool) {
+            if (bool) {
+                return 'Да';
+            } else return  'Нет';
         }
 
     },
@@ -38,40 +44,14 @@ Vue.component('getReport', {
                 this.viewColumnTemplate = [true,true,true,true,true,true,true];
             }
         },
-        del_spaces(str){
-            str = str.replace(/\s/g, '').replace(',','.');
-            let num = +str;
-            return num;
+        getDataFromSourceReportOutTag(){
+            // this.getReportFromCookie('report1');
+            // console.log(document.cookie);
+        },
+        getReportFromCookie (name){
+            // console.log(this.$parent.getCookie(name));
         },
 
-        getDataFromSourceReportOutTag (){
-            this.sourceReportData = [];
-            const $sourceTableNodes = document.querySelectorAll('tbody');
-            const $DataTableNode = $sourceTableNodes[$sourceTableNodes.length - 1];
-            console.log($DataTableNode);
-            // console.log($DataTableNode.childNodes);
-            const arrRows = [...$DataTableNode.getElementsByTagName("tr")];
-            // const arrRows = [...arrRows];
-            // console.log(arrRows[4].getElementsByTagName("td"));
-
-            for (let i=3; i < arrRows.length; i++) {
-                const arrColumns = [...arrRows[i].getElementsByTagName("td")];
-                if (i === (arrRows.length - 1) && (arrColumns[0].textContent === 'Итого')) {
-                    break;
-                }
-                let item = {'name': arrColumns[0].textContent,
-                    'ost_n_d': this.del_spaces(arrColumns[1].textContent),
-                    'ost_n_k': this.del_spaces(arrColumns[2].textContent),
-                    'ob_d': this.del_spaces(arrColumns[3].textContent),
-                    'ob_k': this.del_spaces(arrColumns[4].textContent),
-                    'ost_k_d': this.del_spaces(arrColumns[5].textContent),
-                    'ost_k_k': this.del_spaces(arrColumns[6].textContent),
-                };
-                console.log(item);
-                this.sourceReportData.push(item);
-            }
-            console.log(this.sourceReportData);
-        },
     },
     computed: {
         showHideCaption: function(){
@@ -82,17 +62,17 @@ Vue.component('getReport', {
             return text;
         },
         setFilterCaption: function(){
-            let text = 'Просмотр';
+            let text = 'Применить';
             if (this.isSetViewFilter){
                 text = 'Сбросить'
             }
             return text;
         }
     },
-    template: `<div v-if="$parent.$refs.sourceReport.isFileDataLoaded">
-                    <p>Конструктор отчёта</p>
-                    <button @click="isShowReport = !isShowReport">{{showHideCaption}}</button>
-                    <button @click="getDataFromSourceReportOutTag()">Получить данные</button>
+    template: `<details v-if="reports.length" close>
+                    <summary>Конструктор отчёта</summary>
+<!--                    <button @click="getDataFromSourceReportOutTag()">Получить данные</button>-->
+<!--                    <button @click="isShowReport = !isShowReport">{{showHideCaption}}</button>-->
                     <select v-model="currentDataDimension">
                         <option v-for="(option, index) in dataDimensions"
                             :value="index">
@@ -101,7 +81,13 @@ Vue.component('getReport', {
                     </select>
                     <span>Выбрано: {{currentDataDimension}}</span>
                     <button @click="setViewFilter()">{{setFilterCaption}}</button>
-                    <TABLE v-show="isShowReport"  CELLSPACING=0>
+<!--                    <TABLE v-show="isShowReport"  CELLSPACING=0>-->
+                    <details close>
+                        <summary>Статистика</summary>
+                    </details>
+                    <details close>
+                        <summary>Отчёт</summary>
+                        <TABLE CELLSPACING=0>
                             <TR CLASS=table_row-data>
                                 <TD CLASS="table__column table__column-name"
                                     v-show="viewColumnTemplate[0]"
@@ -161,7 +147,8 @@ Vue.component('getReport', {
                                     {{printColumnTemplate[1] | setDaNet}}
                                 </TD>
                                 <TD CLASS="table__column table__column-data" v-show="viewColumnTemplate[2]">
-                                    {{printColumnTemplate[2] | setDaNet}}
+<!--                                    {{printColumnTemplate[2] | setDaNet}}-->
+                                    <i class="fas fa-print" v-if="printColumnTemplate[2]"></i>
                                 </TD>
                                 <TD CLASS="table__column table__column-data" v-show="viewColumnTemplate[3]">
                                     {{printColumnTemplate[3] | setDaNet}}
@@ -176,7 +163,7 @@ Vue.component('getReport', {
                                     {{printColumnTemplate[6] | setDaNet}}
                                 </TD>
                             </TR>
-                            <TR CLASS=table_row-data v-for="(item, index) of sourceReportData" :key="index">
+                            <TR CLASS=table_row-data v-for="(item, index) of reports[currentReport].data" :key="index">
                                 <TD CLASS="table__column table__column-name" v-show="viewColumnTemplate[0]">{{item.name}}</TD>
                                 <TD CLASS="table__column table__column-data" v-show="viewColumnTemplate[1]">{{item.ost_n_d | setDivider(dataDimensions[currentDataDimension].divider) | setAccuracy(dataDimensions[currentDataDimension].accuracy)}}</TD>
                                 <TD CLASS="table__column table__column-data" v-show="viewColumnTemplate[2]">{{item.ost_n_k | setDivider(dataDimensions[currentDataDimension].divider) | setAccuracy(dataDimensions[currentDataDimension].accuracy)}}</TD>
@@ -186,5 +173,6 @@ Vue.component('getReport', {
                                 <TD CLASS="table__column table__column-data" v-show="viewColumnTemplate[6]">{{item.ost_k_k | setDivider(dataDimensions[currentDataDimension].divider) | setAccuracy(dataDimensions[currentDataDimension].accuracy)}}</TD>
                             </TR>
                     </TABLE>
-                </div>`
+                    </details>
+                </details>`
 })
